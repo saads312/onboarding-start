@@ -25,16 +25,20 @@ reg tx_ready, tx_valid; // no partial updates
 
 always @(posedge clk or posedge rst) begin
   if (rst) begin
-    en_reg_out_7_0 <= 0x00; en_reg_out_15_8 <= 0x00; en_reg_pwm_7_0 <= 0x00; en_reg_pwm_15_8 <= 0x00; pwm_duty_cycle <= 0x00; 
-    tx_valid <= 0;
+    en_reg_out_7_0 <= 8h00; 
+    en_reg_out_15_8 <= 8h00; 
+    en_reg_pwm_7_0 <= 8h00; 
+    en_reg_pwm_15_8 <= 8h00; 
+    pwm_duty_cycle <= 8h00; 
+    tx_valid <= 1'b0;
   end else if (tx_ready && !tx_valid) begin
     if (rw_select) begin
-      if (address < 0x05) begin
-        if (address == 0x00) en_reg_out_7_0 <= data;
-        if (address == 0x01) en_reg_out_15_8 <= data;
-        if (address == 0x02) en_reg_pwm_7_0 <= data;
-        if (address == 0x03) en_reg_pwm_15_8 <= data;
-        if (address == 0x04) pwm_duty_cycle <= data;
+      if (address < 8h05) begin
+        if (address == 8h00) en_reg_out_7_0 <= data;
+        if (address == 8h01) en_reg_out_15_8 <= data;
+        if (address == 8h02) en_reg_pwm_7_0 <= data;
+        if (address == 8h03) en_reg_pwm_15_8 <= data;
+        if (address == 8h04) pwm_duty_cycle <= data;
       end
     end
     tx_valid <= 1;
