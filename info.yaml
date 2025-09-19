@@ -1,12 +1,13 @@
 # Tiny Tapeout project information
-title: "ASIC Onboarding Project - Your Name"  
-author: "Saad Syed"  
-description: "SPI-controlled PWM peripheral for Tiny Tapeout."  
-top_module: "tt_um_uwasic_onboarding_your_name"  # Match your top module name  
-source_files:  
-  - "spi peripheral"
-  - pwm_peripheral.v  
-  - project.v
+project:
+  title: "ASIC Onboarding Project - Saad Syed"  
+  author: "Saad Syed"  
+  description: "SPI-controlled PWM peripheral for Tiny Tapeout."  
+  top_module: "tt_uwasic_onboarding_saad_syed"  # Match your top module name  
+  source_files:  
+    - "spi peripheral"
+    - pwm_peripheral.v  
+    - project.v
 
 # NOT REQUIRED
 pinout:
