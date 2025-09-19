@@ -16,15 +16,13 @@ module tt_um_uwasic_onboarding_saad_syed (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
-  assign uio_oe  = 8'hFF;
+// All output pins must be assigned. If not used, assign to 0.
+assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+assign uio_out = 0;
+assign uio_oe  = 8'hFF;
 
-  // List all unused inputs to prevent warnings
-  wire _unused = &{ena, ui_in[7:3], uio_in, 1'b0};
-
-endmodule
+// List all unused inputs to prevent warnings
+wire _unused = &{ena, ui_in[7:3], uio_in, 1'b0};
 
 wire [7:0] en_reg_out_7_0; 
 wire [7:0] en_reg_out_15_8;
@@ -55,4 +53,8 @@ spi_peripheral spi_peripheral_inst (
     .en_reg_pwm_15_8(en_reg_pwm_15_8),
     .pwm_duty_cycle(pwm_duty_cycle)
 );
+
+
+endmodule
+
 
