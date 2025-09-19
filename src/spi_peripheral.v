@@ -1,5 +1,5 @@
 module spi_peripheral #(
-  localparam MAX_ADDRESS = 0x04;
+  localparam MAX_ADDRESS = 0x04
 ) (
   input wire rst,
   input wire sCLK, // spi domain clock
