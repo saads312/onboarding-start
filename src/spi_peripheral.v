@@ -33,12 +33,12 @@ always @(posedge clk or posedge rst) begin
     tx_valid <= 1'b0;
   end else if (tx_ready && !tx_valid) begin
     if (rw_select) begin
-      if (address < 8'h05) begin
-        if (address == 8'h00) en_reg_out_7_0 <= data;
-        if (address == 8'h01) en_reg_out_15_8 <= data;
-        if (address == 8'h02) en_reg_pwm_7_0 <= data;
-        if (address == 8'h03) en_reg_pwm_15_8 <= data;
-        if (address == 8'h04) pwm_duty_cycle <= data;
+      if (address < 7'h05) begin
+        if (address == 7'h00) en_reg_out_7_0 <= data;
+        if (address == 7'h01) en_reg_out_15_8 <= data;
+        if (address == 7'h02) en_reg_pwm_7_0 <= data;
+        if (address == 7'h03) en_reg_pwm_15_8 <= data;
+        if (address == 7'h04) pwm_duty_cycle <= data;
       end
     end
     tx_valid <= 1;
