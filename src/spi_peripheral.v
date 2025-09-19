@@ -49,53 +49,46 @@ end
 
 always @(posedge clk or posedge rst) begin
   if (rst) begin
-    
     sCLK_sync <= 0;
     nCS_sync <= 3'b111;
     COPI_sync <= 0;
-    
     bit_count <= 0;
-
-    rw_select <= 0; address <= 0; data <= 0;
-
+    rw_select <= 0; 
+    address <= 0; 
+    data <= 0;
     tx_ready <= 0;
-  
   end else begin
-    
     sCLK_sync <= {sCLK_sync[1:0], sCLK};
     nCS_sync <= {nCS_sync[1:0], nCS};
     COPI_sync <= {COPI_sync[0], COPI};
 
-    if (nCS_sync[2] && !nCS_sync[1]) begin // falling edge, reset everything
+    if (nCS_sync[2] && !nCS_sync[1]) begin // falling edge of nCS
       bit_count <= 0;
       rw_select <= 0;
       address <= 0;
       data <= 0;
     end
 
-    if (!nCS_sync[1]) begin
-      if (!sCLK_sync[2] && sCLK_sync[1]) begin // rising edge of clock
+    if (!nCS_sync[1]) begin // nCS is active (low)
+      if (!sCLK_sync[2] && sCLK_sync[1]) begin // rising edge of sCLK
         if (bit_count == 0) begin
-            rw_select <= COPI_sync[1];
+          rw_select <= COPI_sync[0];  // Use [0] instead of [1]
         end else if (bit_count < 8) begin
-            address <= {address[5:0], COPI_sync[1]};
+          address <= {address[5:0], COPI_sync[0]};  // Use [0] instead of [1]
         end else if (bit_count < 16) begin
-            data <= {data[6:0], COPI_sync[1]};
+          data <= {data[6:0], COPI_sync[0]};  // Use [0] instead of [1]
         end
         if (bit_count < 16) bit_count <= bit_count + 1;
       end
     end
 
-    if (!nCS_sync[2] && nCS_sync[1]) begin // rising edge, tx over
-      if (bit_count == 16) begin // check for all bits
+    if (!nCS_sync[2] && nCS_sync[1]) begin // rising edge of nCS
+      if (bit_count == 16) begin
         tx_ready <= 1;
         bit_count <= 0;
       end
     end
 
     if (tx_valid) tx_ready <= 0;
-
   end
 end
-
-endmodule
