@@ -92,3 +92,5 @@ always @(posedge clk or posedge rst) begin
     if (tx_valid) tx_ready <= 0;
   end
 end
+
+endmodule
