@@ -43,10 +43,10 @@ pwm_peripheral pwm_peripheral_inst (
 
 spi_peripheral spi_peripheral_inst (
     .clk(clk),
-    .rst_n(rst_n),
-    .mosi(ui_in[0]),
-    .cs_n(ui_in[1]),
-    .sck(ui_in[2]),
+    .rst(~rst_n),
+    .COPI(ui_in[0]),
+    .nCS(ui_in[1]),
+    .sCLK(ui_in[2]),
     .en_reg_out_7_0(en_reg_out_7_0),
     .en_reg_out_15_8(en_reg_out_15_8),
     .en_reg_pwm_7_0(en_reg_pwm_7_0),
