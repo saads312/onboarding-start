@@ -1,5 +1,5 @@
 module spi_peripheral (
-  input wire rst,
+  input wire rst_n,
   input wire sCLK, // spi domain clock
   input wire clk,  // fast clock
   input wire nCS,
@@ -23,8 +23,8 @@ reg [7:0] data; // 8 bit data
 
 reg tx_ready, tx_valid; // no partial updates
 
-always @(posedge clk or posedge rst) begin
-  if (rst) begin
+always @(posedge clk or negedge rst_n) begin
+  if (!rst_n) begin
     en_reg_out_7_0 <= 8'h00; 
     en_reg_out_15_8 <= 8'h00; 
     en_reg_pwm_7_0 <= 8'h00; 
@@ -47,8 +47,8 @@ always @(posedge clk or posedge rst) begin
   end
 end
 
-always @(posedge clk or posedge rst) begin
-  if (rst) begin
+always @(posedge clk or negedge rst_n) begin
+  if (!rst_n) begin
     sCLK_sync <= 0;
     nCS_sync <= 3'b111;
     COPI_sync <= 0;

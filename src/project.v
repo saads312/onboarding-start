@@ -41,7 +41,7 @@ pwm_peripheral pwm_peripheral_inst (
 
 spi_peripheral spi_peripheral_inst (
     .clk(clk),
-    .rst(~rst_n),
+    .rst_n(rst_n),
     .COPI(ui_in[1]),
     .nCS(ui_in[2]),
     .sCLK(ui_in[0]),
