@@ -13,9 +13,9 @@ module spi_peripheral #(
   output reg [7:0] pwm_duty_cycle
 );
 
-reg sCLK1, sCLK2, sCLK3;
-reg nCS1, nCS2, nCS3;
-reg COPI1, COPI2;
+reg [2:0] sCLK_sync;
+reg [2:0] nCS_sync;
+reg [1:0] COPI_sync;
 
 reg [5:0] bit_count; // 16 bits !!
 
@@ -48,9 +48,9 @@ end
 always @(posedge clk or posedge rst) begin
   if (rst) begin
     
-    sCLK1 <= 0; sCLK2 <= 0; sCLK3 <= 0;
-    nCS1 <= 1; nCS2 <= 1;
-    COPI1 <= 0; COPI2 <= 0;
+    sCLK_sync <= 0;
+    nCS_sync <= 3'b111;
+    COPI_sync <= 0;
     
     bit_count <= 0;
 
@@ -60,38 +60,31 @@ always @(posedge clk or posedge rst) begin
   
   end else begin
     
-    sCLK1 <= sCLK;
-    sCLK2 <= sCLK1;
-    sCLK3 <= sCLK2;
+    sCLK_sync <= {sCLK_sync[1:0], sCLK};
+    nCS_sync <= {nCS_sync[1:0], nCS};
+    COPI_sync <= {COPI_sync[0], COPI};
 
-    nCS1 <= nCS;
-    nCS2 <= nCS1;
-    nCS3 <= nCS2;
-
-    COPI1 <= COPI;
-    COPI2 <= COPI1;
-
-    if (nCS3 && !nCS2) begin // falling edge, reset everything
+    if (nCS_sync[2] && !nCS_sync[1]) begin // falling edge, reset everything
       bit_count <= 0;
       rw_select <= 0;
       address <= 0;
       data <= 0;
     end
 
-    if (!nCS2) begin
-      if (!sCLK3 && sCLK2) begin // rising edge of clock
+    if (!nCS_sync[1]) begin
+      if (!sCLK_sync[2] && sCLK_sync[1]) begin // rising edge of clock
         if (bit_count < 1) begin
-          rw_select <= COPI2;
+          rw_select <= COPI_sync[1];
         end else if (bit_count < 9) begin
-          address <= {address[5:0], COPI2};
+          address <= {address[5:0], COPI_sync[1]};
         end else if (bit_count < 16) begin
-          data <= {data[6:0], COPI2};
+          data <= {data[6:0], COPI_sync[1]};
         end
         if (bit_count < 16) bit_count <= bit_count + 1;
       end
     end
 
-    if (!nCS3 && nCS2) begin // rising edge, tx over
+    if (!nCS_sync[2] && nCS_sync[1]) begin // rising edge, tx over
       if (bit_count == 16) begin // check for all bits
         tx_ready <= 1;
         bit_count <= 0;

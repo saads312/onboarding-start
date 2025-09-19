@@ -3,9 +3,11 @@ project:
   title: "ASIC Onboarding Project - Saad Syed"  
   author: "Saad Syed"  
   description: "SPI-controlled PWM peripheral for Tiny Tapeout."  
+  language: "Verilog"
+  tiles: "1x1"
   top_module: "tt_uwasic_onboarding_saad_syed"  # Match your top module name  
   source_files:  
-    - "spi peripheral"
+    - spi_peripheral.v
     - pwm_peripheral.v  
     - project.v
 
