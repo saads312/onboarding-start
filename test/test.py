@@ -4,6 +4,7 @@
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge
+from cocotb.triggers import with_timeout, Timer
 from cocotb.triggers import ClockCycles
 from cocotb.types import Logic
 from cocotb.types import LogicArray
@@ -181,9 +182,17 @@ async def test_pwm_freq(dut):
 
     # reset everything
     dut._log.info("Reset")
+    dut.ena.value = 1
     dut.rst_n.value = 0
+    ncs = 1
+    bit = 0
+    sclk = 0
+    dut.ui_in.value = ui_in_logicarray(ncs, bit, sclk)
     await ClockCycles(dut.clk, 5)
+    
+    # release reset
     dut.rst_n.value = 1
+    await ClockCycles(dut.clk, 5)
 
     # enable output and pwm enable
     await send_spi_transaction(dut, 1, 0x00, 0x01) 
@@ -216,9 +225,17 @@ async def test_pwm_duty(dut):
 
     # reset everything
     dut._log.info("Reset")
+    dut.ena.value = 1
     dut.rst_n.value = 0
+    ncs = 1
+    bit = 0
+    sclk = 0
+    dut.ui_in.value = ui_in_logicarray(ncs, bit, sclk)
     await ClockCycles(dut.clk, 5)
+    
+    # release reset
     dut.rst_n.value = 1
+    await ClockCycles(dut.clk, 5)
 
     # enable output and pwm enable
     await send_spi_transaction(dut, 1, 0x00, 0x01) 
