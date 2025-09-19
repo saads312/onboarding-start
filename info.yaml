@@ -5,7 +5,7 @@ project:
   description: "SPI-controlled PWM peripheral for Tiny Tapeout."  
   language: "Verilog"
   tiles: "1x1"
-  top_module: "tt_uwasic_onboarding_saad_syed"  # Match your top module name  
+  top_module: "tt_um_uwasic_onboarding_saad_syed"  # Match your top module name  
   source_files:  
     - spi_peripheral.v
     - pwm_peripheral.v  
