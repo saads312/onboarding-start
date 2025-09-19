@@ -1,6 +1,4 @@
-module spi_peripheral #(
-  parameter MAX_ADDRESS = 0x04
-) (
+module spi_peripheral (
   input wire rst,
   input wire sCLK, // spi domain clock
   input wire clk,  // fast clock
@@ -12,6 +10,8 @@ module spi_peripheral #(
   output reg [7:0] en_reg_pwm_15_8,
   output reg [7:0] pwm_duty_cycle
 );
+
+localparam MAX_ADDRESS = 0x04;
 
 reg [2:0] sCLK_sync;
 reg [2:0] nCS_sync;
