@@ -11,8 +11,6 @@ module spi_peripheral (
   output reg [7:0] pwm_duty_cycle
 );
 
-localparam MAX_ADDRESS = 0x04;
-
 reg [2:0] sCLK_sync;
 reg [2:0] nCS_sync;
 reg [1:0] COPI_sync;
@@ -31,7 +29,7 @@ always @(posedge clk or posedge rst) begin
     tx_valid <= 0;
   end else if (tx_ready && !tx_valid) begin
     if (rw_select) begin
-      if (address <= MAX_ADDRESS) begin
+      if (address < 0x05) begin
         if (address == 0x00) en_reg_out_7_0 <= data;
         if (address == 0x01) en_reg_out_15_8 <= data;
         if (address == 0x02) en_reg_pwm_7_0 <= data;
