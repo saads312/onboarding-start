@@ -75,12 +75,12 @@ always @(posedge clk or posedge rst) begin
 
     if (!nCS_sync[1]) begin
       if (!sCLK_sync[2] && sCLK_sync[1]) begin // rising edge of clock
-        if (bit_count < 1) begin
-          rw_select <= COPI_sync[1];
-        end else if (bit_count < 9) begin
-          address <= {address[5:0], COPI_sync[1]};
+        if (bit_count == 0) begin
+            rw_select <= COPI_sync[1];
+        end else if (bit_count < 8) begin
+            address <= {address[5:0], COPI_sync[1]};
         end else if (bit_count < 16) begin
-          data <= {data[6:0], COPI_sync[1]};
+            data <= {data[6:0], COPI_sync[1]};
         end
         if (bit_count < 16) bit_count <= bit_count + 1;
       end
