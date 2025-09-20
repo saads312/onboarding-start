@@ -13,7 +13,7 @@ module spi_peripheral (
 
 reg [2:0] sCLK_sync;
 reg [2:0] nCS_sync;
-reg [1:0] COPI_sync;
+reg [2:0] COPI_sync;
 
 reg [5:0] bit_count; // 16 bits !!
 
@@ -60,7 +60,7 @@ always @(posedge clk or negedge rst_n) begin
   end else begin
     sCLK_sync <= {sCLK_sync[1:0], sCLK};
     nCS_sync <= {nCS_sync[1:0], nCS};
-    COPI_sync <= {COPI_sync[0], COPI};
+    COPI_sync <= {COPI_sync[1:0], COPI};
 
     if (nCS_sync[2] && !nCS_sync[1]) begin // falling edge of nCS
       bit_count <= 0;
@@ -72,11 +72,11 @@ always @(posedge clk or negedge rst_n) begin
     if (!nCS_sync[1]) begin // nCS is active (low)
       if (!sCLK_sync[2] && sCLK_sync[1]) begin // rising edge of sCLK
         if (bit_count == 0) begin
-          rw_select <= COPI_sync[0];  // Use [0] instead of [1]
+          rw_select <= COPI_sync[1];  
         end else if (bit_count < 8) begin
-          address <= {address[5:0], COPI_sync[0]};  // Use [0] instead of [1]
+          address <= {address[5:0], COPI_sync[1]};  
         end else if (bit_count < 16) begin
-          data <= {data[6:0], COPI_sync[0]};  // Use [0] instead of [1]
+          data <= {data[6:0], COPI_sync[1]};  
         end
         if (bit_count < 16) bit_count <= bit_count + 1;
       end

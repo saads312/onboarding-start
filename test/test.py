@@ -228,10 +228,22 @@ async def test_pwm_duty(dut):
 
     # edge case: 0% duty
     await send_spi_transaction(dut, 1, 0x04, 0x00)
-    await ClockCycles(dut.clk, 2000)
+    try:
+        # check for a rising edge
+        await await_edge_bit0(dut, 1, timeout_ns=200_000)
+        assert False, "Unexpected rising edge detected at 0% duty"
+    except TimeoutError:
+        # no rising edge detected as expected
+        pass
     assert int(dut.uo_out.value) & 0x1 == 0, "Expected always low at 0% duty"
 
     # edge case: 100% duty
     await send_spi_transaction(dut, 1, 0x04, 0xFF)
-    await ClockCycles(dut.clk, 2000)
+    try:
+        # check for a falling edge
+        await await_edge_bit0(dut, 0, timeout_ns=200_000)
+        assert False, "Unexpected falling edge detected at 100% duty"
+    except TimeoutError:
+        # no falling edge detected as expected
+        pass
     assert int(dut.uo_out.value) & 0x1 == 1, "Expected always high at 100% duty"
